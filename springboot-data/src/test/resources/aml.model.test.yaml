@@ -1,0 +1,8 @@
+anno: 2024
+version: 12
+revision: 12
+time: "2024-08-29T03:06:49.752872463"
+flusso:
+- nome: "zio"
+  sorgente: "fantasma"
+  condizione: "prodva"

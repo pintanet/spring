@@ -1,0 +1,7 @@
+anno: 2023
+version: 1
+revision: 1
+flusso:
+- nome: "pippo"
+  sorgente: "sorgente"
+  condizione: "condizione"
