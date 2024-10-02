@@ -24,4 +24,6 @@ public class AmlModel {
 
 	@Builder.Default
 	private List<Flusso> flusso = new ArrayList<Flusso>();
+
+	private List<String> prova;
 }

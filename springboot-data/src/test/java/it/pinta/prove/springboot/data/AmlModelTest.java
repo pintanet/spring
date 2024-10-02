@@ -23,7 +23,8 @@ public class AmlModelTest {
 		String yamlFile = "src/test/resources/aml.model.yaml";
 
 		AmlModel model = AmlModel.builder().anno(2023).version(1).revision(1).time(LocalDateTime.now()).build();
-		model.getFlusso().add(Flusso.builder().nome("pippo").condizione("condizione").sorgente("sorgente").build());
+		model.getFlusso().add(Flusso.builder().nome("pippo").condizione("condizione1").sorgente("sorgente1").build());
+		model.getFlusso().add(Flusso.builder().nome("pluto").condizione("condizione2").sorgente("sorgente2").build());
 
 		repo.write(yamlFile, model);
 	}

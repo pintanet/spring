@@ -1,7 +1,12 @@
 anno: 2023
 version: 1
 revision: 1
+time: "2024-09-03T22:20:01.861453098"
 flusso:
 - nome: "pippo"
-  sorgente: "sorgente"
-  condizione: "condizione"
+  sorgente: "sorgente1"
+  condizione: "condizione1"
+- nome: "pluto"
+  sorgente: "sorgente2"
+  condizione: "condizione2"
+prova: null
