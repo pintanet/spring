@@ -1,8 +1,13 @@
 package bdi.ist.sisna.snap.service;
 
+import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -12,9 +17,10 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.Order;
-import org.springframework.batch.item.database.support.H2PagingQueryProvider;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import bdi.ist.sisna.snap.model.DestinationRecord;
@@ -31,20 +37,40 @@ public class CopyService {
 		reader.setDataSource(sourceDataSource);
 		reader.setPageSize(pageSize);
 
-		H2PagingQueryProvider queryProvider = new H2PagingQueryProvider();
-		queryProvider.setSelectClause("*");
-		queryProvider.setFromClause(sourceSchema + "." + sourceTable);
-		queryProvider.setSortKeys(Map.of("id", Order.ASCENDING));
-		reader.setQueryProvider(queryProvider);
+		SqlPagingQueryProviderFactoryBean queryProviderFactoryBean = new SqlPagingQueryProviderFactoryBean();
+		queryProviderFactoryBean.setDataSource(sourceDataSource);
+		queryProviderFactoryBean.setSelectClause("*");
+		queryProviderFactoryBean.setFromClause(sourceSchema + "." + sourceTable);
+
+		queryProviderFactoryBean.setSortKeys(Map.of("idSna", Order.ASCENDING));
+
+		reader.setRowMapper(new RowMapper<Map<String, Object>>() {
+			@Override
+			public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Map<String, Object> row = new HashMap<>();
+				// Mappa i risultati del ResultSet nella mappa
+				for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+					row.put(rs.getMetaData().getColumnName(i), rs.getObject(i));
+				}
+				return row;
+			}
+		});
+
+		try {
+			reader.setQueryProvider(queryProviderFactoryBean.getObject());
+		} catch (Exception e) {
+			// Gestione dell'eccezione
+		}
 
 		return reader;
 	}
 
-	public ItemProcessor<Map<String, Object>, DestinationRecord> createProcessor(Long year) {
+	public ItemProcessor<Map<String, Object>, DestinationRecord> createProcessor(Long jobId, Long year) {
 		return item -> {
 			DestinationRecord record = new DestinationRecord();
 			record.setData(item);
-			record.getData().put("year", year);
+			record.getData().put("job_id", jobId);
+//			record.getData().put("year", year);
 			return record;
 		};
 	}
@@ -56,17 +82,21 @@ public class CopyService {
 
 		String columns = getColumns(destinationSchema, destinationTable);
 		String placeholders = getPlaceholders(columns);
+		List<String> keys = Arrays.asList(columns.replaceAll(" ", "").toUpperCase().split(","));
 
-		writer.setSql("INSERT INTO " + destinationSchema + "." + destinationTable + " (" + columns
-				+ ", job_id) VALUES (" + placeholders + ", ?)");
+//		writer.setSql("INSERT INTO " + destinationSchema + "." + destinationTable + " (" + columns
+//				+ ", job_id) VALUES (" + placeholders + ", ?)");
+
+		writer.setSql("INSERT INTO " + destinationSchema + "." + destinationTable + " (" + columns + ") VALUES ("
+				+ placeholders + ")");
 
 		writer.setItemPreparedStatementSetter((item, ps) -> {
 			Map<String, Object> data = item.getData();
-			int i = 1;
-			for (Object value : data.values()) {
-				ps.setObject(i++, value);
+
+			for (Entry<String, Object> entry : data.entrySet()) {
+				int iPar = keys.indexOf(entry.getKey().toUpperCase()) + 1;
+				ps.setObject(iPar, entry.getValue());
 			}
-			ps.setLong(i, jobId);
 		});
 
 		return writer;

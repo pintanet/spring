@@ -6,6 +6,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ public class JobController {
 	private JobLauncher jobLauncher;
 
 	@Autowired
+	@Qualifier("copyTablesJob")
 	private Job copyTablesJob;
 
 	@PostMapping("/startJob")

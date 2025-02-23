@@ -28,3 +28,5 @@ INSERT INTO source_table_4 (order_date, quantity) VALUES
 ('2023-10-26', 5),
 ('2023-10-27', 10),
 ('2023-10-28', 3);
+
+COMMIT;

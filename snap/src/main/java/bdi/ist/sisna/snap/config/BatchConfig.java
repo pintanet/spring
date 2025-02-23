@@ -39,9 +39,6 @@ public class BatchConfig {
 	private PlatformTransactionManager transactionManager;
 
 	@Autowired
-	private TableConfigRepository tableConfigRepository;
-
-	@Autowired
 	private CopyService copyService;
 
 	@Autowired
@@ -70,7 +67,7 @@ public class BatchConfig {
 
 	@Bean
 	public CustomPartitioner partitioner() {
-		return new CustomPartitioner(tableConfigRepository.findAll());
+		return new CustomPartitioner();
 	}
 
 	@Bean
@@ -85,8 +82,9 @@ public class BatchConfig {
 	@Bean
 	@StepScope
 	public ItemProcessor<Map<String, Object>, DestinationRecord> processor(
+			@Value("#{stepExecutionContext['setpExecutionId']}") Long jobId,
 			@Value("#{jobParameters['year']}") Long year) {
-		return copyService.createProcessor(year);
+		return copyService.createProcessor(jobId, year);
 	}
 
 	@Bean
@@ -94,7 +92,8 @@ public class BatchConfig {
 	public JdbcBatchItemWriter<DestinationRecord> writer(
 			@Value("#{stepExecutionContext['destinationSchema']}") String destinationSchema,
 			@Value("#{stepExecutionContext['destinationTable']}") String destinationTable,
-			@Value("#{jobParameters['jobId']}") Long jobId, @Value("#{jobParameters['year']}") Long year) {
+			@Value("#{stepExecutionContext['setpExecutionId']}") Long jobId,
+			@Value("#{jobParameters['year']}") Long year) {
 		return copyService.createWriter(dataSource, destinationSchema, destinationTable, jobId, year);
 	}
 
@@ -103,19 +102,18 @@ public class BatchConfig {
 		return new StepBuilder("copyStep", jobRepository).<Map<String, Object>, DestinationRecord>chunk(chunkSize) // Dimensione
 																													// dei
 																													// chunk
-				.reader(reader(null, null, null)).processor(processor(null)).writer(writer(null, null, null, null))
-				.transactionManager(transactionManager).build();
+				.reader(reader(null, null, null)).processor(processor(null, null))
+				.writer(writer(null, null, null, null)).transactionManager(transactionManager).build();
 	}
 
 	public static class CustomPartitioner implements org.springframework.batch.core.partition.support.Partitioner {
-		private final List<TableConfig> tableConfigs;
-
-		public CustomPartitioner(List<TableConfig> tableConfigs) {
-			this.tableConfigs = tableConfigs;
-		}
+		@Autowired
+		private TableConfigRepository tableConfigRepository;
 
 		@Override
 		public Map<String, org.springframework.batch.item.ExecutionContext> partition(int gridSize) {
+			List<TableConfig> tableConfigs = tableConfigRepository.findAll();
+
 			Map<String, org.springframework.batch.item.ExecutionContext> map = new HashMap<>(gridSize);
 			int i = 0;
 			for (TableConfig config : tableConfigs) {

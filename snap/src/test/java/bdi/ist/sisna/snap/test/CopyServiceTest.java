@@ -43,7 +43,7 @@ public class CopyServiceTest {
 
 	@Test
 	public void testCreateProcessor() throws Exception {
-		ItemProcessor<Map<String, Object>, DestinationRecord> processor = copyService.createProcessor(2024L);
+		ItemProcessor<Map<String, Object>, DestinationRecord> processor = copyService.createProcessor(1223L, 2024L);
 		assertNotNull(processor);
 
 		Map<String, Object> input = new HashMap<>();
