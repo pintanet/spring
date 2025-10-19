@@ -1,0 +1,38 @@
+converter:
+  # Nome del profilo
+  profile-name: questionario
+  
+  # Nome del file Excel da leggere
+  excel-file-path: "dati/input.xlsx"
+  
+  hasHeaderRow: true
+
+  # Definizione dei gruppi di conversione (ogni gruppo = 1 tabella Oracle e 1 file SQL)
+  conversion-groups:
+    - name: "Group-Anagrafica"
+      sql-output-file: "output/anagrafica_inserts.sql"
+      oracle-table-name: "LIVE.ANAGRAFICA_CLIENTI"
+      
+      # Mappatura delle colonne Excel -> Colonne Oracle
+      mappings:
+        - excel-column: "A" # Indice o Lettera colonna Excel
+          oracle-column: "ID_CLIENTE"
+          oracle-type: "NUMBER"
+        - excel-column: "B"
+          oracle-column: "NOME"
+          oracle-type: "VARCHAR2"
+        - excel-column: "C"
+          oracle-column: "COGNOME"
+          oracle-type: "VARCHAR2"
+
+      # Colonne con valori personalizzati/costanti/espressioni
+      custom-values:
+        - oracle-column: "DATA_CREAZIONE"
+          oracle-type: "DATE"
+          value-type: "EXPRESSION" # COSTANT | EXPRESSION
+          value: "java.time.LocalDateTime.now()" # Espressione Java da valutare
+
+    - name: "Group-Indirizzi"
+      sql-output-file: "output/indirizzi_inserts.sql"
+      oracle-table-name: "INDIRIZZI"
+      # ... (altre mappature)
