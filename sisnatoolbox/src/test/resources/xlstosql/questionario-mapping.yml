@@ -1,0 +1,28 @@
+converter:
+  profile-name: questionario
+  profile-type: "ROW"
+  excel-file-path: "dati/input.xlsx"
+  hasHeaderRow: true
+  
+  conversion-groups:
+    - group-name: "Group-Anagrafica"
+      sql-output-file: "output/anagrafica_inserts.sql"
+      oracle-table-name: "LIVE.ANAGRAFICA_CLIENTI"
+      
+      mappings:
+        - excel-column: "A"
+          oracle-column: "ID_PARTNER"
+          oracle-type: "NUMBER"
+        - excel-column: "C"
+          oracle-column: "PARTNER_DESCRIPTION"
+          oracle-type: "VARCHAR2"
+
+      custom-values:
+        - oracle-column: "ID"
+          oracle-type: "VARCHAR2"
+          value-type: "CONSTANT"
+          value: "LIVE.SEQ_TEST.NEXT()"
+        - oracle-column: "DATA_CREAZIONE"
+          oracle-type: "DATE"
+          value-type: "EXPRESSION"
+          value: "T(java.time.LocalDateTime).now()"
