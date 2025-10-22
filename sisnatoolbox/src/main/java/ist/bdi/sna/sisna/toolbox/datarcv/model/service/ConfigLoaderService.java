@@ -1,4 +1,4 @@
-package ist.bdi.sna.sisna.toolbox.model.service;
+package ist.bdi.sna.sisna.toolbox.datarcv.model.service;
 
 import java.util.Properties;
 
@@ -10,7 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import ist.bdi.sna.sisna.toolbox.model.entity.ConverterConfig;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.ConverterConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,4 +1,4 @@
-package ist.bdi.sna.sisna.toolbox.model.entity;
+package ist.bdi.sna.sisna.toolbox.datarcv.model.entity;
 
 import java.util.Collections;
 import java.util.List;

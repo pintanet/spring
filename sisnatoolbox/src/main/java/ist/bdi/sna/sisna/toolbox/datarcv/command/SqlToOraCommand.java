@@ -1,4 +1,4 @@
-package ist.bdi.sna.sisna.toolbox.command;
+package ist.bdi.sna.sisna.toolbox.datarcv.command;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.jline.reader.LineReader;
@@ -8,9 +8,9 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import ist.bdi.sna.sisna.toolbox.model.entity.ConverterConfig;
-import ist.bdi.sna.sisna.toolbox.model.service.ConfigLoaderService;
-import ist.bdi.sna.sisna.toolbox.model.service.SqlExecutorService;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.ConverterConfig;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.service.ConfigLoaderService;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.service.SqlExecutorService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

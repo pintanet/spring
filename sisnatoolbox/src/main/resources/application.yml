@@ -1,11 +1,14 @@
 spring:
   application:
-    name: sisnatoolbox
+    name: sisna-toolbox
   config:
     import: "optional:classpath:xlstosql/${converter.active-profile}-mapping.yml"
   datasource:
     url: jdbc:oracle:thin:@//localhost:1521/ORCLPDB1
     driver-class-name: oracle.jdbc.OracleDriver
+  shell:
+    history:
+      name: logs/shell-commands.log
 
 converter:
   # Valore placeholder che deve essere sovrascritto a runtime

@@ -1,0 +1,42 @@
+converter:
+  # Nome del profilo
+  profile-name: scheda
+  
+  # Tipo di profilo (definisce la strategia di conversione)
+  profile-type: "SHEET" # Valori possibili: "ROW" (default) o "SHEET"
+  
+  # Directory dei file Excel da processare
+  excel-directory-path: "dati/schede/"
+  
+  hasHeaderRow: false
+
+  # Definizione dei gruppi di conversione (ogni gruppo = 1 tabella Oracle e 1 file SQL)
+  conversion-groups:
+    - name: "Group-Anagrafica"
+      sql-output-file: "output/schede/scheda_inserts.sql"
+      oracle-table-name: "LIVE.ANAGRAFICA_CLIENTI"
+      
+      # Mappatura delle colonne Excel -> Colonne Oracle
+      mappings:
+        - excel-cell: "A1" # Indice o Lettera colonna Excel
+          oracle-column: "ID_PARTNER"
+          oracle-type: "NUMBER"
+        - excel-cell: "A2"
+          oracle-column: "PARTNER_DESCRIPTION"
+          oracle-type: "VARCHAR2"
+
+      # Colonne con valori personalizzati/costanti/espressioni
+      custom-values:
+        - oracle-column: "ID"
+          oracle-type: "VARCHAR2"
+          value-type: "CONSTANT" # COSTANT | EXPRESSION
+          value: "LIVE.SEQ_TEST.NEXT()" # Espressione Java da valutare
+        - oracle-column: "DATA_CREAZIONE"
+          oracle-type: "DATE"
+          value-type: "EXPRESSION" # COSTANT | EXPRESSION
+          value: "T(java.time.LocalDateTime).now()" # Espressione Java da valutare
+
+#    - name: "Group-Indirizzi"
+#      sql-output-file: "output/indirizzi_inserts.sql"
+#      oracle-table-name: "INDIRIZZI"
+#      ... (altre mappature)

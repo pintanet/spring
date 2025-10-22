@@ -1,4 +1,4 @@
-package ist.bdi.sna.sisna.toolbox.model.service;
+package ist.bdi.sna.sisna.toolbox.test.datarcv.model.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,10 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import ist.bdi.sna.sisna.toolbox.SisnaToolboxApplication;
-import ist.bdi.sna.sisna.toolbox.model.entity.ColumnMapping;
-import ist.bdi.sna.sisna.toolbox.model.entity.ConversionGroup;
-import ist.bdi.sna.sisna.toolbox.model.entity.ConverterConfig;
-import ist.bdi.sna.sisna.toolbox.model.entity.CustomValue;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.ColumnMapping;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.ConversionGroup;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.ConverterConfig;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.CustomValue;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.service.ConfigLoaderService;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = SisnaToolboxApplication.class, properties = { "spring.main.web-application-type=none",

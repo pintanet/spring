@@ -1,4 +1,4 @@
-package ist.bdi.sna.sisna.toolbox.model.service;
+package ist.bdi.sna.sisna.toolbox.datarcv.model.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,8 +15,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 
-import ist.bdi.sna.sisna.toolbox.model.entity.ConversionGroup;
-import ist.bdi.sna.sisna.toolbox.model.entity.ConverterConfig;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.ConversionGroup;
+import ist.bdi.sna.sisna.toolbox.datarcv.model.entity.ConverterConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
