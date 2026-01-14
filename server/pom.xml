@@ -73,6 +73,28 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+	
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase> 
+						<goals>
+							<goal>makeAggregateBom</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<projectType>library</projectType>
+					<schemaVersion>1.6</schemaVersion>
+					<outputDirectory>${project.build.directory}/META-INF/sbom</outputDirectory>
+					<outputName>bom</outputName>
+					<outputFormat>json</outputFormat>
+					<includeCompileScope>true</includeCompileScope>
+					<includeRuntimeScope>true</includeRuntimeScope>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
