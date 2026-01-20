@@ -1,0 +1,52 @@
+app:
+  nodes:
+    self-ip: peer2
+    self-port: 8762
+    peer-ip: peer1
+    peer-port: 8761
+
+server:
+  port: ${app.nodes.self-port}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: SERVERDISC
+
+  boot:
+    admin:
+      context-path: /admin
+      discovery:
+        enabled: true
+      client:
+        url: http://${app.nodes.self-ip}:${app.nodes.self-port}/admin
+        instance:
+          id: ${spring.application.name}-${app.nodes.self-port}
+          name: ${spring.application.name}
+          service-url: http://${app.nodes.self-ip}:${app.nodes.self-port}
+          management-url: http://${app.nodes.self-ip}:${app.nodes.self-port}/actuator
+          health-url: http://${app.nodes.self-ip}:${app.nodes.self-port}/actuator/health
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+eureka:
+  instance:
+    hostname: ${app.nodes.self-ip}
+    instance-id: ${spring.application.name}:${app.nodes.self-ip}:${app.nodes.self-port}
+    prefer-ip-address: false
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${app.nodes.self-ip}:${app.nodes.self-port}/eureka/,http://${app.nodes.peer-ip}:${app.nodes.peer-port}/eureka/
+  server:
+    enable-self-preservation: false
+    use-read-only-response-cache: false

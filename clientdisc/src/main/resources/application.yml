@@ -1,0 +1,47 @@
+app:
+  self-hostname: localhost
+  self-port: 8764
+
+  sba-server-hostname: localhost
+  sba-server-port: 80
+
+server:
+  port: ${app.self-port}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: CLIENTDISC
+
+  boot:
+    admin:
+      client:
+        url: http://${app.sba-server-hostname}:${app.sba-server-port}/admin
+        instance:
+          name: ${spring.application.name}
+          id: ${spring.application.name}-${app.self-port}
+          service-url: http://${app.self-hostname}:${app.self-port}
+          management-url: http://${app.self-hostname}:${app.self-port}/actuator
+          health-url: http://${app.self-hostname}:${app.self-port}/actuator/health
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+eureka:
+  instance:
+    hostname: ${app.self-hostname}
+    instance-id: ${spring.application.name}:${app.self-hostname}:${app.self-port}
+    prefer-ip-address: false
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      # Eureka usa lo stesso hostname del VIP di Admin
+      defaultZone: http://${app.sba-server-hostname}:${app.sba-server-port}/eureka/

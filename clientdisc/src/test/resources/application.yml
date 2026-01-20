@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    config:
+      enabled: false  # Evita che cerchi un Config Server esterno
+
+eureka:
+  server:
+    enabled: false    # Disabilita il server Eureka (grazie alla modifica al punto 1)
+  client:
+    enabled: false    # Disabilita il client Eureka
+    register-with-eureka: false
+    fetch-registry: false
